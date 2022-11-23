@@ -1,4 +1,4 @@
-const { assert } = require("chai");
+const { assert, expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("SimpleStorage", function () {
@@ -13,5 +13,15 @@ describe("SimpleStorage", function () {
     const currentValue = await simpleStorage.retrieve();
     const expectedValue = "0";
     assert.equal(currentValue.toString(), expectedValue);
+    // example of test written with expect
+    // expect(currentValue.toString()).to.equal(expectedValue);
+  });
+  it("Should update when we call store", async function () {
+    const expectedValue = "7";
+    const transactionResponse = await simpleStorage.store(expectedValue);
+    await transactionResponse.wait(1);
+
+    const currrentValue = await simpleStorage.retrieve();
+    assert.equal(currrentValue.toString(), expectedValue);
   });
 });
