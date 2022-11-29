@@ -1,11 +1,16 @@
-const { assert, expect } = require("chai");
-const { ethers } = require("hardhat");
+import { assert, expect } from "chai";
+import { BigNumber } from "ethers";
+import { ethers } from "hardhat";
+import { SimpleStorage__factory, SimpleStorage } from "../typechain-types";
 
 describe("SimpleStorage", function () {
-  let simpleStorageFactory, simpleStorage;
+  let simpleStorageFactory: SimpleStorage__factory,
+    simpleStorage: SimpleStorage;
 
   beforeEach(async function () {
-    simpleStorageFactory = await ethers.getContractFactory("SimpleStorage");
+    simpleStorageFactory = (await ethers.getContractFactory(
+      "SimpleStorage"
+    )) as SimpleStorage__factory;
     simpleStorage = await simpleStorageFactory.deploy();
   });
 
@@ -26,7 +31,7 @@ describe("SimpleStorage", function () {
   });
   it("Should update when we call addPerson", async function () {
     const name = "Long";
-    const favoriteNum = 10;
+    const favoriteNum = "10";
     const expectedValue = favoriteNum;
     const transactionResponse = await simpleStorage.addPerson(
       name,
@@ -34,6 +39,6 @@ describe("SimpleStorage", function () {
     );
     await transactionResponse.wait(1);
     const currentValue = await simpleStorage.nameToFavoriteNumber(name);
-    assert.equal(currentValue, expectedValue);
+    assert.equal(currentValue.toString(), expectedValue);
   });
 });
